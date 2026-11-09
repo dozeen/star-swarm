@@ -225,6 +225,15 @@
       <button class="touch-btn" id="tRight">DESTRA &rarr;</button>
     </div>
   </div>
+  <div id="scoreModal" role="dialog" aria-modal="true" aria-label="Salva punteggio" style="display:none;position:fixed;inset:0;background:#000d;z-index:9999;align-items:center;justify-content:center;padding:16px">
+    <div style="width:min(430px,95vw);background:#101b2b;border:2px solid #00ff88;border-radius:12px;padding:22px;color:white;font:14px monospace;max-height:90vh;overflow:auto">
+      <h2 style="color:#00ff88;margin-bottom:12px">GAME OVER · CLASSIFICA</h2>
+      <p id="finalScore" style="margin-bottom:14px"></p>
+      <form id="scoreForm"><label for="playerName">Il tuo nome (max 20 caratteri)</label><input id="playerName" maxlength="20" autocomplete="nickname" required style="display:block;width:100%;margin:10px 0;padding:12px;background:#fff;color:#111;font:16px sans-serif;border-radius:6px"><button type="submit" style="padding:12px;background:#00ff88;border:0;border-radius:6px;font-weight:bold">SALVA PUNTEGGIO</button></form>
+      <p id="scoreMessage" aria-live="polite" style="margin:10px 0"></p><h3 style="margin-top:12px">Migliori 10 punteggi (su questo dispositivo)</h3><ol id="scoreBoard" style="padding-left:26px;margin:12px 0;line-height:1.8"></ol>
+      <button id="scoreClose" style="padding:10px;background:#34435a;color:white;border:0;border-radius:6px">CHIUDI / RIGIOCA</button>
+    </div>
+  </div>
 
   <script>
     /* =====================================================================
@@ -865,6 +874,7 @@
     }
 
     function resetGame() {
+      scorePromptShown=false;scoreModal.style.display='none';
       setGamePaused(false);
       SFX.stopUfo();
       resetCaptureBoss();
@@ -1005,11 +1015,24 @@
       if(b.phase==='lifting')drawMatrix(SPRITES.cannon,b.captureX,b.captureY,4,'#88ffff');
       ctx.restore();
     }
+    // Classifica persistente sul dispositivo: nessun nome viene trasmesso online.
+    const scoreModal=document.getElementById('scoreModal');
+    const scoreForm=document.getElementById('scoreForm');
+    const scoreBoard=document.getElementById('scoreBoard');
+    const scoreMessage=document.getElementById('scoreMessage');
+    let scorePromptShown=false;
+    function readScores(){try{const a=JSON.parse(localStorage.getItem('star_swarm_scores_v1')||'[]');return Array.isArray(a)?a.filter(x=>typeof x.name==='string'&&Number.isFinite(x.score)).slice(0,10):[];}catch(e){return [];}}
+    function showScores(){scoreBoard.replaceChildren();const a=readScores();if(!a.length){const li=document.createElement('li');li.textContent='Nessun punteggio salvato';scoreBoard.append(li);}for(const item of a){const li=document.createElement('li');li.textContent=item.name+' — '+item.score+' punti';scoreBoard.append(li);}}
+    function promptScore(){if(scorePromptShown)return;scorePromptShown=true;document.getElementById('finalScore').textContent='Hai totalizzato '+score+' punti';scoreForm.style.display='block';scoreMessage.textContent='';document.getElementById('playerName').value=localStorage.getItem('star_swarm_last_name')||'';showScores();scoreModal.style.display='flex';clearControls();}
+    scoreForm.addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('playerName').value.trim().replace(/[\x00-\x1f\x7f]/g,'').slice(0,20);if(!name)return;try{const a=readScores();a.push({name,score});a.sort((a,b)=>b.score-a.score);localStorage.setItem('star_swarm_scores_v1',JSON.stringify(a.slice(0,10)));localStorage.setItem('star_swarm_last_name',name);scoreForm.style.display='none';scoreMessage.textContent='Punteggio salvato!';showScores();}catch(err){scoreMessage.textContent='Impossibile salvare: memoria del browser non disponibile.';}});
+    document.getElementById('scoreClose').addEventListener('click',()=>{scoreModal.style.display='none';resetGame();});
+    function checkGameOver(){if(gameState===STATE_GAMEOVER)promptScore();}
     let diveCountdown = 100;
     function update() {
       if (gamePaused) return;
       if (gameState === STATE_GAMEOVER) {
-        if (keys.firePressed) {
+        checkGameOver();
+        if (keys.firePressed && scoreModal.style.display!=='flex') {
           initAudio();
           resetGame();
         }
@@ -1589,6 +1612,7 @@
     btnCrt.addEventListener('click', toggleCrt);
 
     btnRestart.addEventListener('click', () => {
+      scoreModal.style.display='none';scorePromptShown=false;
       initAudio();
       resetGame();
     });
