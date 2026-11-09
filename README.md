@@ -10,6 +10,10 @@ Gioco arcade per browser di Onofrio Cannone: formazioni di alieni, picchiate, ca
 
 Puoi giocare direttamente dal browser, anche da smartphone, senza scaricare o installare nulla. La pagina di presentazione include anche una versione giocabile incorporata.
 
+## Classifica online sul server Dozeen
+
+Al termine della partita, il giocatore può pubblicare nome, punteggio e, facoltativamente, nome visualizzato su Facebook, con consenso esplicito. La classifica condivisa è disponibile nella [versione sul server Dozeen](https://dozeen.ns0.it/star-swarm/game.html) e mostra i 20 migliori risultati. Il nome Facebook è dichiarato dal giocatore e **non è verificato** tramite Facebook. La versione statica di GitHub Pages non include il servizio server per la classifica.
+
 ## Giocare
 
 Apri `index.html` in un browser moderno. Nessuna installazione o compilazione, nessuna dipendenza esterna. Gli effetti sonori sono sintetizzati con Web Audio. Il record viene salvato nel browser.
