@@ -2,6 +2,14 @@
 
 Gioco arcade per browser di Onofrio Cannone: formazioni di alieni, picchiate, cattura della nave e potenziamenti. Ispirato agli sparatutto arcade classici; progetto non affiliato ai loro produttori.
 
+## Prova il videogioco direttamente sul server Dozeen
+
+🎮 **[▶ GIOCA ORA — Star Swarm sul server Dozeen](https://dozeen.ns0.it/star-swarm/game.html)**
+
+📖 **[Scopri come funziona il gioco: boss, potenziamenti e comandi](https://dozeen.ns0.it/star-swarm/)**
+
+Puoi giocare direttamente dal browser, anche da smartphone, senza scaricare o installare nulla. La pagina di presentazione include anche una versione giocabile incorporata.
+
 ## Giocare
 
 Apri `index.html` in un browser moderno. Nessuna installazione o compilazione, nessuna dipendenza esterna. Gli effetti sonori sono sintetizzati con Web Audio. Il record viene salvato nel browser.
@@ -26,14 +34,13 @@ Pulsanti per schermo intero e comandi touch inclusi. Cambiando finestra la parti
 - Il boss viola resta nascosto con due cannoni e torna dopo la perdita del secondo.
 - Con due cannoni appare il boss dorato: colpiscilo quattro volte durante le picchiate per ottenere raffiche doppie e 1.000 punti. Il potenziamento si perde insieme al secondo cannone.
 
-## Pubblicare su GitHub Pages
+## Versione online e distribuzione
 
-1. Crea un repository pubblico chiamato `star-swarm` e carica i file di questa cartella, inclusa `.github`.
-2. In **Settings → Pages → Build and deployment**, seleziona **GitHub Actions**.
-3. Avvia il workflow **Deploy Star Swarm** oppure invia un commit al ramo `main`.
-4. Il workflow mostra il collegamento al gioco pubblicato.
+- **Demo sul server Dozeen:** https://dozeen.ns0.it/star-swarm/game.html
+- **Presentazione e guida:** https://dozeen.ns0.it/star-swarm/
+- **GitHub Pages:** https://dozeen.github.io/star-swarm/
 
-Il workflow pubblica solo `index.html` e `favicon.svg`. Non richiede credenziali aggiuntive: usa il token temporaneo di GitHub Actions.
+Il repository pubblico contiene il gioco statico. GitHub Pages usa il ramo `main` dalla radice del repository.
 
 ## Privacy e stato
 
